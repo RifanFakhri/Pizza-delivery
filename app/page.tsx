@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import SplashScreen from "@/components/SplashScreen";
 import Navbar from "@/components/Navbar";
+import ChatWidget from "@/components/ChatWidget";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
 
@@ -333,6 +334,7 @@ export default function Home() {
   return (
     <>
       <SplashScreen onComplete={handleSplashComplete} />
+      <ChatWidget />
 
       <div
         ref={mainContentRef}
@@ -585,7 +587,7 @@ export default function Home() {
         <section
           id="contact"
           ref={contactRef}
-          className="relative min-h-screen py-32 px-6 md:px-24 bg-transparent overflow-hidden transition-colors duration-500 flex flex-col items-center justify-center"
+          className="relative min-h-screen py-24 md:py-32 px-6 sm:px-12 md:px-24 bg-transparent overflow-hidden transition-colors duration-500 flex flex-col items-center justify-center"
         >
           {/* Floating Ingredients */}
           <div className="contact-floating absolute top-[20%] right-[15%] w-32 h-32 rotate-12 opacity-40 pointer-events-none z-10">
@@ -596,31 +598,31 @@ export default function Home() {
           </div>
 
           <div className="max-w-6xl w-full relative z-20">
-            <div className="contact-header text-center mb-20 flex flex-col items-center gap-6">
-              <span className="text-orange-500 font-bold uppercase tracking-[0.4em] text-xs">Get In Touch</span>
-              <h2 className="text-6xl md:text-9xl font-black text-foreground uppercase tracking-tighter leading-[0.8] mb-4">
+            <div className="contact-header text-center mb-12 md:mb-20 flex flex-col items-center gap-6">
+              <span className="text-orange-500 font-bold uppercase tracking-[0.4em] text-[10px] md:text-xs">Get In Touch</span>
+              <h2 className="text-4xl sm:text-6xl md:text-9xl font-black text-foreground uppercase tracking-tighter leading-[0.9] md:leading-[0.8] mb-4">
                 Let's Make <br />
-                <span className="text-transparent" style={{ WebkitTextStroke: theme === 'dark' ? '2.5px white' : '2.5px black' }}>Something Delicious</span>
+                <span className="text-transparent" style={{ WebkitTextStroke: theme === 'dark' ? '1.5px white' : '1.5px black' }}>Something Delicious</span>
               </h2>
-              <div className="w-32 h-[3px] bg-orange-600"></div>
+              <div className="w-24 md:w-32 h-[3px] bg-orange-600"></div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
               {/* Info Column */}
               <div className="contact-info flex flex-col gap-12">
-                <div className="flex flex-col gap-8">
-                  <div className="flex items-start gap-6 border-l-2 border-orange-500 pl-8 py-2">
-                    <span className="text-orange-500 font-black text-4xl">01.</span>
+                <div className="flex flex-col gap-6 md:gap-8">
+                  <div className="flex items-start gap-4 md:gap-6 border-l-2 border-orange-500 pl-6 md:pl-8 py-2">
+                    <span className="text-orange-500 font-black text-3xl md:text-4xl">01.</span>
                     <div className="flex flex-col">
-                      <h4 className="text-foreground font-bold uppercase tracking-widest text-lg mb-2">Location</h4>
-                      <p className="text-foreground/70 dark:text-foreground/60 leading-relaxed font-medium">Jl. Pizza Enak No. 123, <br />Jakarta, Indonesia</p>
+                      <h4 className="text-foreground font-bold uppercase tracking-widest text-base md:text-lg mb-1 md:mb-2">Location</h4>
+                      <p className="text-sm md:text-base text-foreground/70 dark:text-foreground/60 leading-relaxed font-medium">Jl. Pizza Enak No. 123, <br />Jakarta, Indonesia</p>
                     </div>
                   </div>
-                  <div className="flex items-start gap-6 border-l-2 border-orange-500 pl-8 py-2">
-                    <span className="text-orange-500 font-black text-4xl">02.</span>
+                  <div className="flex items-start gap-4 md:gap-6 border-l-2 border-orange-500 pl-6 md:pl-8 py-2">
+                    <span className="text-orange-500 font-black text-3xl md:text-4xl">02.</span>
                     <div className="flex flex-col">
-                      <h4 className="text-foreground font-bold uppercase tracking-widest text-lg mb-2">Contact</h4>
-                      <p className="text-foreground/70 dark:text-foreground/60 leading-relaxed font-medium">+62 123 4567 8900 <br />hello@mamahfaqih.com</p>
+                      <h4 className="text-foreground font-bold uppercase tracking-widest text-base md:text-lg mb-1 md:mb-2">Contact</h4>
+                      <p className="text-sm md:text-base text-foreground/70 dark:text-foreground/60 leading-relaxed font-medium">+62 123 4567 8900 <br />hello@mamahfaqih.com</p>
                     </div>
                   </div>
                 </div>
@@ -635,7 +637,7 @@ export default function Home() {
               </div>
 
               {/* Form Column */}
-              <div className="contact-form bg-foreground/[0.04] dark:bg-white/[0.02] border border-foreground/10 dark:border-foreground/5 p-10 md:p-16 rounded-3xl backdrop-blur-3xl relative">
+              <div className="contact-form bg-foreground/[0.04] dark:bg-white/[0.02] border border-foreground/10 dark:border-foreground/5 p-6 sm:p-10 md:p-16 rounded-3xl backdrop-blur-3xl relative">
                 <form className="flex flex-col gap-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="flex flex-col gap-2">
@@ -651,7 +653,7 @@ export default function Home() {
                     <label className="text-[10px] uppercase tracking-widest font-black text-orange-600 dark:text-orange-500/60">Message</label>
                     <textarea rows={4} placeholder="How can we help?" className="bg-transparent border-b border-foreground/20 dark:border-foreground/10 py-3 text-lg focus:outline-none focus:border-orange-500 transition-colors duration-500 resize-none placeholder:text-foreground/30"></textarea>
                   </div>
-                  <button className="self-start mt-6 px-16 py-6 bg-orange-600 text-white font-black uppercase tracking-[0.3em] text-xs hover:bg-orange-700 transition-all duration-700 shadow-2xl hover:-translate-y-2 rounded-lg">
+                  <button className="self-start mt-6 px-10 md:px-16 py-4 md:py-6 bg-orange-600 text-white font-black uppercase tracking-[0.3em] text-[10px] md:text-xs hover:bg-orange-700 transition-all duration-700 shadow-2xl hover:-translate-y-2 rounded-lg">
                     Send Message
                   </button>
                 </form>
