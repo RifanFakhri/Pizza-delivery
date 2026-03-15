@@ -63,6 +63,9 @@ export default function Home() {
       gsap.to(".ingredient-3", { y: -15, x: -15, repeat: -1, yoyo: true, duration: 2.5, ease: "sine.inOut" });
       gsap.to(".ingredient-4", { y: 10, x: 20, repeat: -1, yoyo: true, duration: 3.5, ease: "sine.inOut" });
 
+      const isMobile = window.innerWidth < 768;
+      const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
       // Mouse Parallax Interaction
       const handleMouseMove = (e: MouseEvent) => {
         const { clientX, clientY } = e;
@@ -116,7 +119,9 @@ export default function Home() {
         });
       };
 
-      window.addEventListener("mousemove", handleMouseMove);
+      if (!isTouchDevice) {
+        window.addEventListener("mousemove", handleMouseMove);
+      }
 
       // --- SECTION TRANSITIONS ---
       // We animate the wrapper for scrolling to avoid conflict with inner element parallax
@@ -138,7 +143,7 @@ export default function Home() {
           y: -100,
           opacity: 0,
           scale: 0.8,
-          filter: "blur(20px)",
+          filter: isMobile ? "blur(0px)" : "blur(20px)",
           ease: "none",
           immediateRender: false
         }
@@ -274,7 +279,7 @@ export default function Home() {
         opacity: 0.2,
         scale: 0.9,
         y: -50,
-        filter: "blur(10px)",
+        filter: isMobile ? "blur(0px)" : "blur(10px)",
       });
 
       // Transition from Menu to next (if any)
@@ -287,7 +292,7 @@ export default function Home() {
         },
         opacity: 0.2,
         scale: 0.9,
-        filter: "blur(10px)",
+        filter: isMobile ? "blur(0px)" : "blur(10px)",
       });
 
       // Background Parallax
@@ -304,25 +309,27 @@ export default function Home() {
 
       // --- VELOCITY SKEW EFFECT ---
       // This makes elements "lean" as you scroll fast
-      let proxy = { skew: 0 };
-      let skewSetter = gsap.quickSetter(".menu-card", "skewY", "deg");
-      let clamp = gsap.utils.clamp(-10, 10);
+      if (!isMobile) {
+        let proxy = { skew: 0 };
+        let skewSetter = gsap.quickSetter(".menu-card", "skewY", "deg");
+        let clamp = gsap.utils.clamp(-10, 10);
 
-      ScrollTrigger.create({
-        onUpdate: (self) => {
-          let skew = clamp(self.getVelocity() / -500);
-          if (Math.abs(skew) > Math.abs(proxy.skew)) {
-            proxy.skew = skew;
-            gsap.to(proxy, {
-              skew: 0,
-              duration: 0.5,
-              ease: "power3",
-              overwrite: true,
-              onUpdate: () => skewSetter(proxy.skew)
-            });
+        ScrollTrigger.create({
+          onUpdate: (self) => {
+            let skew = clamp(self.getVelocity() / -500);
+            if (Math.abs(skew) > Math.abs(proxy.skew)) {
+              proxy.skew = skew;
+              gsap.to(proxy, {
+                skew: 0,
+                duration: 0.5,
+                ease: "power3",
+                overwrite: true,
+                onUpdate: () => skewSetter(proxy.skew)
+              });
+            }
           }
-        }
-      });
+        });
+      }
 
       return () => {
         window.removeEventListener("mousemove", handleMouseMove);
@@ -374,7 +381,7 @@ export default function Home() {
             {/* Main Pizza Wrapper */}
             <div
               ref={pizzaRef}
-              className="absolute bottom-[5%] left-1/2 -translate-x-1/2 w-full max-w-[500px] z-20 cursor-pointer group"
+              className="absolute bottom-[5%] left-1/2 -translate-x-1/2 w-full max-w-[500px] z-20 cursor-pointer group will-change-transform"
               onMouseEnter={() => {
                 gsap.to(".pizza-glow", { opacity: 1, scale: 1.2, duration: 0.5 });
                 gsap.to(".fire-effect", { scale: 1.1, opacity: 1, duration: 0.5 });
@@ -386,34 +393,35 @@ export default function Home() {
             >
               <div className="relative w-full aspect-square">
                 {/* Fire Effects Left & Right */}
-                <div className="fire-effect absolute -left-10 bottom-0 w-40 h-80 bg-gradient-to-t from-orange-600 via-red-600 to-transparent opacity-80 blur-3xl -z-10 animate-pulse transition-all duration-700 rounded-full mix-blend-screen" style={{ transform: 'rotate(-20deg)' }}></div>
-                <div className="fire-effect absolute -right-10 bottom-0 w-40 h-80 bg-gradient-to-t from-orange-600 via-red-600 to-transparent opacity-80 blur-3xl -z-10 animate-pulse transition-all duration-700 rounded-full mix-blend-screen" style={{ transform: 'rotate(20deg)' }}></div>
+                <div className="fire-effect hidden md:block absolute -left-10 bottom-0 w-40 h-80 bg-gradient-to-t from-orange-600 via-red-600 to-transparent opacity-80 blur-3xl -z-10 animate-pulse transition-all duration-700 rounded-full mix-blend-screen" style={{ transform: 'rotate(-20deg)' }}></div>
+                <div className="fire-effect hidden md:block absolute -right-10 bottom-0 w-40 h-80 bg-gradient-to-t from-orange-600 via-red-600 to-transparent opacity-80 blur-3xl -z-10 animate-pulse transition-all duration-700 rounded-full mix-blend-screen" style={{ transform: 'rotate(20deg)' }}></div>
 
                 <Image
                   src="/pizza-v2.png"
                   alt="Delicious Pizza"
                   fill
-                  className="object-contain drop-shadow-[0_50px_100px_rgba(0,0,0,1)] transition-transform duration-700"
+                  className="object-contain drop-shadow-xl md:drop-shadow-[0_50px_100px_rgba(0,0,0,1)] transition-transform duration-700"
+                  sizes="(max-width: 768px) 80vw, 500px"
                   priority
                 />
                 {/* Ambient Light/Fire effect */}
-                <div className="pizza-glow absolute inset-x-0 bottom-0 h-full w-full bg-gradient-radial from-orange-600/30 to-transparent opacity-60 rounded-full blur-[100px] -z-10 transition-all duration-500"></div>
+                <div className="pizza-glow absolute inset-x-0 bottom-0 h-full w-full bg-gradient-radial from-orange-600/30 to-transparent opacity-60 rounded-full blur-[60px] md:blur-[100px] -z-10 transition-all duration-500"></div>
               </div>
             </div>
 
             {/* Floating Ingredients Wrapper */}
             <div ref={ingredientsRef} className="absolute inset-0 pointer-events-none z-30">
-              <div className="ingredient ingredient-1 absolute top-[15%] left-[10%] w-32 h-32 blur-[1px]">
-                <Image src="/tomato-v2.png" alt="tomato" fill className="object-contain" />
+              <div className="ingredient ingredient-1 absolute top-[15%] left-[10%] w-32 h-32 md:blur-[1px] will-change-transform">
+                <Image src="/tomato-v2.png" alt="tomato" fill className="object-contain" sizes="150px" />
               </div>
-              <div className="ingredient ingredient-2 absolute top-[35%] right-[5%] w-28 h-28 blur-[2px]">
-                <Image src="/chili-v2.png" alt="chili" fill className="object-contain" />
+              <div className="ingredient ingredient-2 absolute top-[35%] right-[5%] w-28 h-28 md:blur-[2px] will-change-transform">
+                <Image src="/chili-v2.png" alt="chili" fill className="object-contain" sizes="150px" />
               </div>
-              <div className="ingredient ingredient-3 absolute bottom-[15%] left-[5%] w-24 h-24">
-                <Image src="/mint-v2.png" alt="mint" fill className="object-contain" />
+              <div className="ingredient ingredient-3 absolute bottom-[15%] left-[5%] w-24 h-24 will-change-transform">
+                <Image src="/mint-v2.png" alt="mint" fill className="object-contain" sizes="100px" />
               </div>
-              <div className="ingredient ingredient-4 absolute top-[20%] right-[15%] w-20 h-20 opacity-40 rotate-45">
-                <Image src="/tomato-v2.png" alt="tomato" fill className="object-contain" />
+              <div className="ingredient ingredient-4 absolute top-[20%] right-[15%] w-20 h-20 opacity-40 rotate-45 will-change-transform">
+                <Image src="/tomato-v2.png" alt="tomato" fill className="object-contain" sizes="100px" />
               </div>
             </div>
           </div>
@@ -437,20 +445,21 @@ export default function Home() {
           <div className="about-glow absolute top-1/2 left-1/3 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/20 rounded-full blur-[150px] -z-10 pointer-events-none transition-all duration-500"></div>
 
           {/* Left: Table Image (frame3.png) */}
-          <div className="about-image-container relative w-full md:w-[50%] aspect-video -ml-4 md:-ml-8 group">
+          <div className="about-image-container relative w-full md:w-[50%] aspect-video -ml-4 md:-ml-8 group will-change-transform">
             <Image
               src="/frame3.png"
               alt="Our Table"
               fill
-              className={`object-contain object-left transition-transform duration-1000 group-hover:scale-[1.03] drop-shadow-[0_0_60px_rgba(234,88,12,0.3)] ${theme === 'dark' ? 'brightness-100' : 'brightness-90'}`}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className={`object-contain object-left transition-transform duration-1000 group-hover:scale-[1.03] drop-shadow-lg md:drop-shadow-[0_0_60px_rgba(234,88,12,0.3)] ${theme === 'dark' ? 'brightness-100' : 'brightness-90'}`}
               priority
             />
             {/* Contextual Ingredients for about section */}
-            <div className="absolute top-[10%] right-[10%] w-20 h-20 rotate-45 opacity-40 about-floating [animation:float_4s_ease-in-out_infinite]">
-              <Image src="/chili-v2.png" alt="chili" fill className="object-contain" />
+            <div className="absolute top-[10%] right-[10%] w-20 h-20 rotate-45 opacity-40 about-floating [animation:float_4s_ease-in-out_infinite] will-change-transform">
+              <Image src="/chili-v2.png" alt="chili" fill className="object-contain" sizes="100px" />
             </div>
-            <div className="absolute bottom-[10%] left-[20%] w-16 h-16 -rotate-12 opacity-40 about-floating [animation:float_5s_ease-in-out_infinite_1s]">
-              <Image src="/mint-v2.png" alt="mint" fill className="object-contain" />
+            <div className="absolute bottom-[10%] left-[20%] w-16 h-16 -rotate-12 opacity-40 about-floating [animation:float_5s_ease-in-out_infinite_1s] will-change-transform">
+              <Image src="/mint-v2.png" alt="mint" fill className="object-contain" sizes="100px" />
             </div>
           </div>
 
@@ -516,17 +525,17 @@ export default function Home() {
           className="relative min-h-screen py-32 px-6 md:px-24 bg-transparent overflow-hidden transition-colors duration-500"
         >
           {/* Floating Ingredients */}
-          <div className="menu-floating absolute top-[15%] left-[10%] w-32 h-32 rotate-[-45deg] opacity-80 pointer-events-none z-10">
-            <Image src="/chili-v2.png" alt="chili" fill className="object-contain" />
+          <div className="menu-floating absolute top-[15%] left-[10%] w-32 h-32 rotate-[-45deg] opacity-80 pointer-events-none z-10 will-change-transform hidden md:block">
+            <Image src="/chili-v2.png" alt="chili" fill className="object-contain" sizes="150px" />
           </div>
-          <div className="menu-floating absolute -bottom-10 -left-10 w-64 h-64 rotate-[-15deg] opacity-90 pointer-events-none z-10">
-            <Image src="/tomato-v2.png" alt="tomato" fill className="object-contain" />
+          <div className="menu-floating absolute -bottom-10 -left-10 w-64 h-64 rotate-[-15deg] opacity-90 pointer-events-none z-10 will-change-transform hidden md:block">
+            <Image src="/tomato-v2.png" alt="tomato" fill className="object-contain" sizes="300px" />
           </div>
-          <div className="menu-floating absolute top-10 right-10 w-40 h-40 rotate-[135deg] opacity-80 pointer-events-none z-10">
-            <Image src="/mint-v2.png" alt="mint" fill className="object-contain" />
+          <div className="menu-floating absolute top-10 right-10 w-40 h-40 rotate-[135deg] opacity-80 pointer-events-none z-10 will-change-transform hidden md:block">
+            <Image src="/mint-v2.png" alt="mint" fill className="object-contain" sizes="200px" />
           </div>
-          <div className="menu-floating absolute bottom-10 right-[5%] w-32 h-32 rotate-[15deg] opacity-80 pointer-events-none z-10">
-            <Image src="/chili-v2.png" alt="chili" fill className="object-contain" />
+          <div className="menu-floating absolute bottom-10 right-[5%] w-32 h-32 rotate-[15deg] opacity-80 pointer-events-none z-10 will-change-transform hidden md:block">
+            <Image src="/chili-v2.png" alt="chili" fill className="object-contain" sizes="150px" />
           </div>
 
           <div className="flex flex-col lg:flex-row gap-16 items-center lg:items-start relative z-20">
@@ -560,19 +569,20 @@ export default function Home() {
             {/* Right Column: Grid */}
             <div className="w-full lg:w-[60%] grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <div key={i} className="menu-card relative group">
+                <div key={i} className="menu-card relative group will-change-transform">
                   {/* Rough orange offset background */}
                   <div className="absolute inset-0 bg-orange-600 scale-[1.05] translate-x-3 translate-y-3 skew-y-1 transition-transform duration-500 group-hover:translate-x-1 group-hover:translate-y-1"
                     style={{ clipPath: 'polygon(0% 5%, 15% 0%, 85% 5%, 100% 0%, 95% 45%, 100% 100%, 85% 95%, 15% 100%, 0% 95%, 5% 45%)' }}>
                   </div>
 
                   {/* Image with torn edge effect */}
-                  <div className="relative aspect-[4/5] overflow-hidden bg-neutral-900 border-none transition-transform duration-500 group-hover:scale-[0.98]"
+                  <div className="relative aspect-[4/5] overflow-hidden bg-neutral-900 border-none transition-transform duration-500 group-hover:scale-[0.98] will-change-transform"
                     style={{ clipPath: 'polygon(5% 0%, 95% 5%, 100% 15%, 95% 85%, 100% 100%, 15% 95%, 0% 100%, 5% 50%, 0% 0%)' }}>
                     <Image
                       src="/menu1.png"
                       alt={`Special Menu ${i}`}
                       fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       className="object-cover grayscale-[0.2] transition-all duration-700 group-hover:grayscale-0 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-20"></div>
@@ -590,11 +600,11 @@ export default function Home() {
           className="relative min-h-screen py-24 md:py-32 px-6 sm:px-12 md:px-24 bg-transparent overflow-hidden transition-colors duration-500 flex flex-col items-center justify-center"
         >
           {/* Floating Ingredients */}
-          <div className="contact-floating absolute top-[20%] right-[15%] w-32 h-32 rotate-12 opacity-40 pointer-events-none z-10">
-            <Image src="/chili-v2.png" alt="chili" fill className="object-contain" />
+          <div className="contact-floating absolute top-[20%] right-[15%] w-32 h-32 rotate-12 opacity-40 pointer-events-none z-10 will-change-transform hidden md:block">
+            <Image src="/chili-v2.png" alt="chili" fill className="object-contain" sizes="150px" />
           </div>
-          <div className="contact-floating absolute bottom-[15%] left-[10%] w-40 h-40 -rotate-12 opacity-40 pointer-events-none z-10">
-            <Image src="/tomato-v2.png" alt="tomato" fill className="object-contain" />
+          <div className="contact-floating absolute bottom-[15%] left-[10%] w-40 h-40 -rotate-12 opacity-40 pointer-events-none z-10 will-change-transform hidden md:block">
+            <Image src="/tomato-v2.png" alt="tomato" fill className="object-contain" sizes="200px" />
           </div>
 
           <div className="max-w-6xl w-full relative z-20">
