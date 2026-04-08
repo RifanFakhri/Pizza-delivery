@@ -50,27 +50,30 @@ export default function Home() {
         gsap.set(titleRef.current, { scale: 0.5, opacity: 0 });
         gsap.set(".ingredient", { opacity: 0, scale: 0, rotation: 180 });
 
-        tl.to(mainContentRef.current, { opacity: 1, duration: 1 })
-          .fromTo(mainContentRef.current, { backgroundSize: '110%' }, { backgroundSize: '100%', duration: 2, ease: "power2.out" }, "-=1")
-          .to(titleRef.current, { scale: 1, opacity: 1, duration: 1.2, ease: "back.out(1.7)" }, "-=1.5")
-          .to(pizzaRef.current, { y: 0, opacity: 1, scale: 1, duration: 1.5, ease: "power4.out" }, "-=1")
+        const isMobile = window.innerWidth < 768;
+        const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+
+        tl.to(mainContentRef.current, { opacity: 1, duration: 1, force3D: true })
+          .fromTo(mainContentRef.current, { backgroundSize: '110%' }, { backgroundSize: '100%', duration: 2, ease: "power2.out", force3D: true }, "-=1")
+          .to(titleRef.current, { scale: 1, opacity: 1, duration: 1.2, ease: "back.out(1.7)", force3D: true }, "-=1.5")
+          .to(pizzaRef.current, { y: 0, opacity: 1, scale: 1, duration: 1.5, ease: "power4.out", force3D: true }, "-=1")
           .to(".ingredient", {
             opacity: 1,
             scale: 1,
             rotation: 0,
             duration: 1,
-            stagger: 0.2,
-            ease: "elastic.out(1, 0.5)"
+            stagger: isMobile ? 0.05 : 0.2,
+            ease: "elastic.out(1, 0.5)",
+            force3D: true
           }, "-=0.8");
 
-        // Floating animation loop
-        gsap.to(".ingredient-1", { y: -20, x: 10, repeat: -1, yoyo: true, duration: 3, ease: "sine.inOut" });
-        gsap.to(".ingredient-2", { y: 20, x: -10, repeat: -1, yoyo: true, duration: 4, ease: "sine.inOut" });
-        gsap.to(".ingredient-3", { y: -15, x: -15, repeat: -1, yoyo: true, duration: 2.5, ease: "sine.inOut" });
-        gsap.to(".ingredient-4", { y: 10, x: 20, repeat: -1, yoyo: true, duration: 3.5, ease: "sine.inOut" });
-
-        const isMobile = window.innerWidth < 768;
-        const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+        // Floating animation loop - Disable on mobile to save main-thread work
+        if (!isMobile) {
+          gsap.to(".ingredient-1", { y: -20, x: 10, repeat: -1, yoyo: true, duration: 3, ease: "sine.inOut", force3D: true });
+          gsap.to(".ingredient-2", { y: 20, x: -10, repeat: -1, yoyo: true, duration: 4, ease: "sine.inOut", force3D: true });
+          gsap.to(".ingredient-3", { y: -15, x: -15, repeat: -1, yoyo: true, duration: 2.5, ease: "sine.inOut", force3D: true });
+          gsap.to(".ingredient-4", { y: 10, x: 20, repeat: -1, yoyo: true, duration: 3.5, ease: "sine.inOut", force3D: true });
+        }
 
         // Mouse Parallax Interaction
         const handleMouseMove = (e: MouseEvent) => {
@@ -293,17 +296,20 @@ export default function Home() {
           filter: isMobile ? "none" : "blur(10px)",
         });
 
-        // Background Parallax
-        gsap.to(".parallax-bg", {
-          yPercent: 30,
-          ease: "none",
-          scrollTrigger: {
-            trigger: "body",
-            start: "top top",
-            end: "bottom bottom",
-            scrub: true
-          }
-        });
+        // Background Parallax - Disable on mobile
+        if (!isMobile) {
+          gsap.to(".parallax-bg", {
+            yPercent: 30,
+            ease: "none",
+            force3D: true,
+            scrollTrigger: {
+              trigger: "body",
+              start: "top top",
+              end: "bottom bottom",
+              scrub: true
+            }
+          });
+        }
 
         // --- VELOCITY SKEW EFFECT ---
         if (!isMobile) {
@@ -362,7 +368,8 @@ export default function Home() {
             alt="Background Texture"
             fill
             className="object-cover opacity-10 dark:opacity-40 mix-blend-overlay"
-            quality={60}
+            quality={40} // Low quality to save bytes on texture
+            loading="lazy"
           />
         </div>
 
@@ -413,8 +420,10 @@ export default function Home() {
                   alt="Delicious Pizza"
                   fill
                   className="object-contain drop-shadow-xl md:drop-shadow-[0_50px_100px_rgba(0,0,0,1)] transition-transform duration-700"
-                  sizes="(max-width: 768px) 80vw, 500px"
+                  sizes="(max-width: 640px) 95vw, (max-width: 1024px) 70vw, 500px"
                   priority
+                  quality={75}
+                  loading="eager"
                 />
                 {/* Ambient Light/Fire effect */}
                 <div className="pizza-glow absolute inset-x-0 bottom-0 h-full w-full bg-gradient-radial from-orange-600/30 to-transparent opacity-60 rounded-full blur-[60px] md:blur-[100px] -z-10 transition-all duration-500"></div>

@@ -114,8 +114,8 @@ const Navbar = () => {
     return (
         <>
             <nav className="fixed top-0 left-0 w-full z-[70] flex justify-between items-center px-6 md:px-12 py-6 transition-all duration-300">
-                {/* Background Blur */}
-                <div className={`absolute inset-0 -z-10 bg-white/70 dark:bg-black/10 backdrop-blur-md border-b border-black/5 dark:border-white/10 shadow-2xl transition-opacity duration-500 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></div>
+                {/* Background Blur - Disabled on mobile for performance */}
+                <div className={`absolute inset-0 -z-10 bg-white/70 dark:bg-black/10 md:backdrop-blur-md border-b border-black/5 dark:border-white/10 shadow-2xl transition-opacity duration-500 ${isMobileMenuOpen ? 'opacity-0' : 'opacity-100'}`}></div>
 
                 <div className="flex items-center gap-3 group cursor-pointer relative z-[60]" onClick={() => scrollTo('home')}>
                     <div className="w-10 h-10 bg-gradient-to-br from-orange-400 to-orange-700 rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-300">
