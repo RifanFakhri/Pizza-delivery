@@ -14,7 +14,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete }) => {
         // Since the new animation loops, we'll use a fixed duration for the splash screen
         const timeout = setTimeout(() => {
             handleComplete();
-        }, 4000); // 3.5 seconds fixed duration
+        }, 2000); // Reduced from 4000ms for better perceived performance
 
         return () => clearTimeout(timeout);
     }, []);

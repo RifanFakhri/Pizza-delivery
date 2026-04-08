@@ -2,11 +2,16 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import SplashScreen from "@/components/SplashScreen";
 import Navbar from "@/components/Navbar";
-import ChatWidget from "@/components/ChatWidget";
 import gsap from "gsap";
 import ScrollTrigger from "gsap/ScrollTrigger";
+
+const ChatWidget = dynamic(() => import("@/components/ChatWidget"), { 
+  ssr: false,
+  loading: () => <div className="fixed bottom-8 right-8 w-16 h-16 bg-orange-500/20 rounded-full animate-pulse" />
+});
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -37,304 +42,303 @@ export default function Home() {
 
   useEffect(() => {
     if (!showSplash) {
-      const tl = gsap.timeline();
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline();
 
-      // Initial states
-      gsap.set(pizzaRef.current, { y: 200, opacity: 0, scale: 0.8 });
-      gsap.set(titleRef.current, { scale: 0.5, opacity: 0 });
-      gsap.set(".ingredient", { opacity: 0, scale: 0, rotation: 180 });
+        // Initial states
+        gsap.set(pizzaRef.current, { y: 200, opacity: 0, scale: 0.8 });
+        gsap.set(titleRef.current, { scale: 0.5, opacity: 0 });
+        gsap.set(".ingredient", { opacity: 0, scale: 0, rotation: 180 });
 
-      tl.to(mainContentRef.current, { opacity: 1, duration: 1 })
-        .fromTo(mainContentRef.current, { backgroundSize: '110%' }, { backgroundSize: '100%', duration: 2, ease: "power2.out" }, "-=1")
-        .to(titleRef.current, { scale: 1, opacity: 1, duration: 1.2, ease: "back.out(1.7)" }, "-=1.5")
-        .to(pizzaRef.current, { y: 0, opacity: 1, scale: 1, duration: 1.5, ease: "power4.out" }, "-=1")
-        .to(".ingredient", {
-          opacity: 1,
-          scale: 1,
-          rotation: 0,
-          duration: 1,
-          stagger: 0.2,
-          ease: "elastic.out(1, 0.5)"
-        }, "-=0.8");
+        tl.to(mainContentRef.current, { opacity: 1, duration: 1 })
+          .fromTo(mainContentRef.current, { backgroundSize: '110%' }, { backgroundSize: '100%', duration: 2, ease: "power2.out" }, "-=1")
+          .to(titleRef.current, { scale: 1, opacity: 1, duration: 1.2, ease: "back.out(1.7)" }, "-=1.5")
+          .to(pizzaRef.current, { y: 0, opacity: 1, scale: 1, duration: 1.5, ease: "power4.out" }, "-=1")
+          .to(".ingredient", {
+            opacity: 1,
+            scale: 1,
+            rotation: 0,
+            duration: 1,
+            stagger: 0.2,
+            ease: "elastic.out(1, 0.5)"
+          }, "-=0.8");
 
-      // Floating animation loop
-      gsap.to(".ingredient-1", { y: -20, x: 10, repeat: -1, yoyo: true, duration: 3, ease: "sine.inOut" });
-      gsap.to(".ingredient-2", { y: 20, x: -10, repeat: -1, yoyo: true, duration: 4, ease: "sine.inOut" });
-      gsap.to(".ingredient-3", { y: -15, x: -15, repeat: -1, yoyo: true, duration: 2.5, ease: "sine.inOut" });
-      gsap.to(".ingredient-4", { y: 10, x: 20, repeat: -1, yoyo: true, duration: 3.5, ease: "sine.inOut" });
+        // Floating animation loop
+        gsap.to(".ingredient-1", { y: -20, x: 10, repeat: -1, yoyo: true, duration: 3, ease: "sine.inOut" });
+        gsap.to(".ingredient-2", { y: 20, x: -10, repeat: -1, yoyo: true, duration: 4, ease: "sine.inOut" });
+        gsap.to(".ingredient-3", { y: -15, x: -15, repeat: -1, yoyo: true, duration: 2.5, ease: "sine.inOut" });
+        gsap.to(".ingredient-4", { y: 10, x: 20, repeat: -1, yoyo: true, duration: 3.5, ease: "sine.inOut" });
 
-      const isMobile = window.innerWidth < 768;
-      const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
+        const isMobile = window.innerWidth < 768;
+        const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
 
-      // Mouse Parallax Interaction
-      const handleMouseMove = (e: MouseEvent) => {
-        const { clientX, clientY } = e;
-        const xPos = (clientX / window.innerWidth - 0.5);
-        const yPos = (clientY / window.innerHeight - 0.5);
+        // Mouse Parallax Interaction
+        const handleMouseMove = (e: MouseEvent) => {
+          const { clientX, clientY } = e;
+          const xPos = (clientX / window.innerWidth - 0.5);
+          const yPos = (clientY / window.innerHeight - 0.5);
 
-        gsap.to(pizzaRef.current, {
-          x: xPos * 30,
-          y: yPos * 30,
-          rotateY: xPos * 20,
-          rotateX: -yPos * 20,
-          duration: 1,
-          ease: "power2.out"
-        });
+          gsap.to(pizzaRef.current, {
+            x: xPos * 30,
+            y: yPos * 30,
+            rotateY: xPos * 20,
+            rotateX: -yPos * 20,
+            duration: 1,
+            ease: "power2.out"
+          });
 
-        gsap.to(titleRef.current, {
-          x: xPos * -50,
-          y: yPos * -50,
-          duration: 1.5,
-          ease: "power2.out"
-        });
+          gsap.to(titleRef.current, {
+            x: xPos * -50,
+            y: yPos * -50,
+            duration: 1.5,
+            ease: "power2.out"
+          });
 
-        gsap.to(".ingredient", {
-          x: (i) => xPos * (40 + i * 20),
-          y: (i) => yPos * (40 + i * 20),
-          duration: 1.2,
-          ease: "power2.out"
-        });
+          gsap.to(".ingredient", {
+            x: (i: number) => xPos * (40 + i * 20),
+            y: (i: number) => yPos * (40 + i * 20),
+            duration: 1.2,
+            ease: "power2.out"
+          });
 
-        // About Section Parallax
-        gsap.to(".about-image-container", {
-          x: xPos * 40,
-          y: yPos * 40,
-          rotateY: xPos * 10,
-          duration: 1.2,
-          ease: "power2.out"
-        });
+          // About Section Parallax
+          gsap.to(".about-image-container", {
+            x: xPos * 40,
+            y: yPos * 40,
+            rotateY: xPos * 10,
+            duration: 1.2,
+            ease: "power2.out"
+          });
 
-        gsap.to(".about-text-content", {
-          x: xPos * -30,
-          y: yPos * -30,
-          duration: 1.5,
-          ease: "power2.out"
-        });
+          gsap.to(".about-text-content", {
+            x: xPos * -30,
+            y: yPos * -30,
+            duration: 1.5,
+            ease: "power2.out"
+          });
 
-        gsap.to(".about-glow", {
-          x: xPos * 100,
-          y: yPos * 100,
-          duration: 2,
-          ease: "power2.out"
-        });
-      };
+          gsap.to(".about-glow", {
+            x: xPos * 100,
+            y: yPos * 100,
+            duration: 2,
+            ease: "power2.out"
+          });
+        };
 
-      if (!isTouchDevice) {
-        window.addEventListener("mousemove", handleMouseMove);
-      }
+        if (!isTouchDevice) {
+          window.addEventListener("mousemove", handleMouseMove);
+        }
 
-      // --- SECTION TRANSITIONS ---
-      // We animate the wrapper for scrolling to avoid conflict with inner element parallax
-      gsap.fromTo(heroWrapperRef.current,
-        {
-          opacity: 1,
-          scale: 1,
-          y: 0,
-          filter: "blur(0px)"
-        },
-        {
-          scrollTrigger: {
-            trigger: "section:first-of-type",
-            start: "top top",
-            end: "bottom 40%",
-            scrub: true,
-            invalidateOnRefresh: true,
+        // --- SECTION TRANSITIONS ---
+        gsap.fromTo(heroWrapperRef.current,
+          {
+            opacity: 1,
+            scale: 1,
+            y: 0,
+            filter: "blur(0px)"
           },
-          y: -100,
-          opacity: 0,
-          scale: 0.8,
-          filter: isMobile ? "blur(0px)" : "blur(20px)",
-          ease: "none",
-          immediateRender: false
-        }
-      );
+          {
+            scrollTrigger: {
+              trigger: "section:first-of-type",
+              start: "top top",
+              end: "bottom 40%",
+              scrub: true,
+              invalidateOnRefresh: true,
+            },
+            y: -100,
+            opacity: 0,
+            scale: 0.8,
+            filter: isMobile ? "blur(0px)" : "blur(20px)",
+            ease: "none",
+            immediateRender: false
+          }
+        );
 
-      // Refresh ScrollTrigger after splash is gone and layout is settled
-      setTimeout(() => {
-        ScrollTrigger.refresh();
-      }, 100);
-
-      // --- ABOUT SECTION ANIMATIONS (Continuous Scrub) ---
-      const aboutTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: aboutRef.current,
-          start: "top 85%",
-          end: "top 25%",
-          scrub: 2.5,
-          invalidateOnRefresh: true,
-        }
-      });
-
-      aboutTl.from(".about-image-container", {
-        x: -250,
-        opacity: 0,
-        scale: 0.8,
-        rotate: -5,
-        ease: "none"
-      })
-        .from(".about-floating", {
-          opacity: 0,
-          scale: 0,
-          y: 100,
-          stagger: 0.1,
-          ease: "none"
-        }, "<")
-        .from(".about-text-content", {
-          x: 150,
-          opacity: 0,
-          scale: 0.9,
-          ease: "none"
-        }, "-=0.3")
-        .from(".about-glow", {
-          opacity: 0,
-          scale: 0.4,
-          ease: "none"
-        }, "<");
-
-      // --- MENU SECTION ANIMATIONS ---
-      const menuTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: menuRef.current,
-          start: "top 80%",
-          end: "top 30%",
-          scrub: 2.5,
-        }
-      });
-
-      menuTl.from(".menu-title", {
-        x: -100,
-        opacity: 0,
-        duration: 1
-      })
-        .from(".menu-text", {
-          y: 50,
-          opacity: 0,
-          duration: 1
-        }, "-=0.5")
-        .from(".menu-card", {
-          scale: 0.8,
-          opacity: 0,
-          stagger: 0.2,
-          duration: 1,
-          ease: "back.out(1.7)"
-        }, "-=0.8")
-        .from(".menu-floating", {
-          y: 100,
-          opacity: 0,
-          stagger: 0.2,
-          duration: 1
-        }, "-=1");
-
-      gsap.to(".menu-floating", {
-        y: (i) => (i % 2 === 0 ? -20 : 20),
-        x: (i) => (i % 3 === 0 ? 15 : -15),
-        repeat: -1,
-        yoyo: true,
-        duration: 3,
-        stagger: 0.5,
-        ease: "sine.inOut"
-      });
-
-      // --- CONTACT SECTION ANIMATIONS ---
-      const contactTl = gsap.timeline({
-        scrollTrigger: {
-          trigger: contactRef.current,
-          start: "top 80%",
-          end: "top 20%",
-          scrub: 2,
-        }
-      });
-
-      contactTl.from(".contact-header", {
-        y: 100,
-        opacity: 0,
-        duration: 1
-      })
-        .from(".contact-form", {
-          x: 50,
-          opacity: 0,
-          duration: 1
-        }, "-=0.5")
-        .from(".contact-info", {
-          x: -50,
-          opacity: 0,
-          duration: 1
-        }, "<")
-        .from(".contact-floating", {
-          scale: 0,
-          opacity: 0,
-          stagger: 0.2,
-          duration: 1
-        }, "-=0.8");
-
-      // --- SECTION EXIT TRANSITIONS ---
-      // Transition from About to Menu
-      gsap.to(aboutRef.current, {
-        scrollTrigger: {
-          trigger: aboutRef.current,
-          start: "bottom 95%",
-          end: "bottom 40%",
-          scrub: 2,
-        },
-        opacity: 0.2,
-        scale: 0.9,
-        y: -50,
-        filter: isMobile ? "blur(0px)" : "blur(10px)",
-      });
-
-      // Transition from Menu to next (if any)
-      gsap.to(menuRef.current, {
-        scrollTrigger: {
-          trigger: menuRef.current,
-          start: "bottom 95%",
-          end: "bottom 20%",
-          scrub: 2,
-        },
-        opacity: 0.2,
-        scale: 0.9,
-        filter: isMobile ? "blur(0px)" : "blur(10px)",
-      });
-
-      // Background Parallax
-      gsap.to(".parallax-bg", {
-        yPercent: 30,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "body",
-          start: "top top",
-          end: "bottom bottom",
-          scrub: true
-        }
-      });
-
-      // --- VELOCITY SKEW EFFECT ---
-      // This makes elements "lean" as you scroll fast
-      if (!isMobile) {
-        let proxy = { skew: 0 };
-        let skewSetter = gsap.quickSetter(".menu-card", "skewY", "deg");
-        let clamp = gsap.utils.clamp(-10, 10);
-
-        ScrollTrigger.create({
-          onUpdate: (self) => {
-            let skew = clamp(self.getVelocity() / -500);
-            if (Math.abs(skew) > Math.abs(proxy.skew)) {
-              proxy.skew = skew;
-              gsap.to(proxy, {
-                skew: 0,
-                duration: 0.5,
-                ease: "power3",
-                overwrite: true,
-                onUpdate: () => skewSetter(proxy.skew)
-              });
-            }
+        // --- ABOUT SECTION ANIMATIONS ---
+        const aboutTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: aboutRef.current,
+            start: "top 85%",
+            end: "top 25%",
+            scrub: 2.5,
+            invalidateOnRefresh: true,
           }
         });
-      }
 
-      return () => {
-        window.removeEventListener("mousemove", handleMouseMove);
-        ScrollTrigger.getAll().forEach(t => t.kill());
-      };
+        aboutTl.from(".about-image-container", {
+          x: -250,
+          opacity: 0,
+          scale: 0.8,
+          rotate: -5,
+          ease: "none"
+        })
+          .from(".about-floating", {
+            opacity: 0,
+            scale: 0,
+            y: 100,
+            stagger: 0.1,
+            ease: "none"
+          }, "<")
+          .from(".about-text-content", {
+            x: 150,
+            opacity: 0,
+            scale: 0.9,
+            ease: "none"
+          }, "-=0.3")
+          .from(".about-glow", {
+            opacity: 0,
+            scale: 0.4,
+            ease: "none"
+          }, "<");
+
+        // --- MENU SECTION ANIMATIONS ---
+        const menuTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: menuRef.current,
+            start: "top 80%",
+            end: "top 30%",
+            scrub: 2.5,
+          }
+        });
+
+        menuTl.from(".menu-title", {
+          x: -100,
+          opacity: 0,
+          duration: 1
+        })
+          .from(".menu-text", {
+            y: 50,
+            opacity: 0,
+            duration: 1
+          }, "-=0.5")
+          .from(".menu-card", {
+            scale: 0.8,
+            opacity: 0,
+            stagger: 0.2,
+            duration: 1,
+            ease: "back.out(1.7)"
+          }, "-=0.8")
+          .from(".menu-floating", {
+            y: 100,
+            opacity: 0,
+            stagger: 0.2,
+            duration: 1
+          }, "-=1");
+
+        gsap.to(".menu-floating", {
+          y: (i: number) => (i % 2 === 0 ? -20 : 20),
+          x: (i: number) => (i % 3 === 0 ? 15 : -15),
+          repeat: -1,
+          yoyo: true,
+          duration: 3,
+          stagger: 0.5,
+          ease: "sine.inOut"
+        });
+
+        // --- CONTACT SECTION ANIMATIONS ---
+        const contactTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: contactRef.current,
+            start: "top 80%",
+            end: "top 20%",
+            scrub: 2,
+          }
+        });
+
+        contactTl.from(".contact-header", {
+          y: 100,
+          opacity: 0,
+          duration: 1
+        })
+          .from(".contact-form", {
+            x: 50,
+            opacity: 0,
+            duration: 1
+          }, "-=0.5")
+          .from(".contact-info", {
+            x: -50,
+            opacity: 0,
+            duration: 1
+          }, "<")
+          .from(".contact-floating", {
+            scale: 0,
+            opacity: 0,
+            stagger: 0.2,
+            duration: 1
+          }, "-=0.8");
+
+        // --- SECTION EXIT TRANSITIONS ---
+        gsap.to(aboutRef.current, {
+          scrollTrigger: {
+            trigger: aboutRef.current,
+            start: "bottom 95%",
+            end: "bottom 40%",
+            scrub: 2,
+          },
+          opacity: 0.2,
+          scale: 0.9,
+          y: -50,
+          filter: isMobile ? "blur(0px)" : "blur(10px)",
+        });
+
+        gsap.to(menuRef.current, {
+          scrollTrigger: {
+            trigger: menuRef.current,
+            start: "bottom 95%",
+            end: "bottom 20%",
+            scrub: 2,
+          },
+          opacity: 0.2,
+          scale: 0.9,
+          filter: isMobile ? "blur(0px)" : "blur(10px)",
+        });
+
+        // Background Parallax
+        gsap.to(".parallax-bg", {
+          yPercent: 30,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "body",
+            start: "top top",
+            end: "bottom bottom",
+            scrub: true
+          }
+        });
+
+        // --- VELOCITY SKEW EFFECT ---
+        if (!isMobile) {
+          let proxy = { skew: 0 };
+          let skewSetter = gsap.quickSetter(".menu-card", "skewY", "deg");
+          let clamp = gsap.utils.clamp(-10, 10);
+
+          ScrollTrigger.create({
+            onUpdate: (self) => {
+              let skew = clamp(self.getVelocity() / -500);
+              if (Math.abs(skew) > Math.abs(proxy.skew)) {
+                proxy.skew = skew;
+                gsap.to(proxy, {
+                  skew: 0,
+                  duration: 0.5,
+                  ease: "power3",
+                  overwrite: true,
+                  onUpdate: () => skewSetter(proxy.skew)
+                });
+              }
+            }
+          });
+        }
+
+        // Refresh ScrollTrigger after splash is gone
+        setTimeout(() => {
+          ScrollTrigger.refresh();
+        }, 200);
+
+        return () => {
+          window.removeEventListener("mousemove", handleMouseMove);
+        };
+      }, mainContentRef);
+
+      return () => ctx.revert();
     }
   }, [showSplash]);
 
@@ -352,7 +356,15 @@ export default function Home() {
           className="fixed inset-0 transition-opacity duration-700 pointer-events-none"
           style={{ backgroundImage: 'var(--bg-gradient)' }}
         ></div>
-        <div className="parallax-bg fixed inset-0 bg-[url('/bg.png')] bg-[length:120%_120%] bg-center opacity-10 dark:opacity-40 mix-blend-overlay transition-opacity duration-700 pointer-events-none"></div>
+        <div className="parallax-bg fixed inset-0 pointer-events-none -z-10">
+          <Image
+            src="/bg.png"
+            alt="Background Texture"
+            fill
+            className="object-cover opacity-10 dark:opacity-40 mix-blend-overlay"
+            quality={60}
+          />
+        </div>
 
         <Navbar />
 
@@ -582,7 +594,8 @@ export default function Home() {
                       src="/menu1.png"
                       alt={`Special Menu ${i}`}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 250px"
+                      quality={75}
                       className="object-cover grayscale-[0.2] transition-all duration-700 group-hover:grayscale-0 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-60 transition-opacity duration-500 group-hover:opacity-20"></div>

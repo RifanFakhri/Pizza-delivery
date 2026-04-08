@@ -72,7 +72,7 @@ const Navbar = () => {
         }
     };
 
-    const NavLink = ({ id, label, mobile = false }: { id: string, label: string, mobile?: boolean }) => {
+    const NavLink = React.memo(({ id, label, mobile = false }: { id: string, label: string, mobile?: boolean }) => {
         const isActive = activeSection === id;
 
         if (mobile) {
@@ -101,13 +101,15 @@ const Navbar = () => {
                     {label}
                 </span>
                 {!isActive && (
-                    <span className="absolute top-full left-0 group-hover:-translate-y-full transition-transform duration-300 block text-orange-500">
+                    <span className="absolute top-full left-0 group-hover:-translate-y-full transition-transform duration-300 block text-orange-500 font-bold">
                         {label}
                     </span>
                 )}
             </Link>
         );
-    };
+    });
+
+    NavLink.displayName = 'NavLink';
 
     return (
         <>
