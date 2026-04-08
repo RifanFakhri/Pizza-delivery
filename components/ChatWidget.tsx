@@ -115,11 +115,12 @@ const ChatWidget = () => {
                     </div>
                     <div className="flex flex-col">
                         <span className="text-white font-black uppercase tracking-widest text-sm">Chef Faqih Bot</span>
-                        <span className="text-white/70 text-[10px] uppercase tracking-widest font-medium">Online • Ready to Help</span>
+                        <span className="text-white/80 text-sm uppercase tracking-widest font-medium">Online • Ready to Help</span>
                     </div>
                     <button
                         onClick={toggleChat}
-                        className="ml-auto text-white/50 hover:text-white transition-colors"
+                        aria-label="Close Chat"
+                        className="ml-auto text-white/70 hover:text-white transition-colors"
                     >
                         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -140,7 +141,7 @@ const ChatWidget = () => {
                                 }`}>
                                 {msg.text}
                             </div>
-                            <span className="text-[10px] text-neutral-400 mt-1 px-1">
+                            <span className="text-xs text-neutral-400 mt-1 px-1">
                                 {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                             </span>
                         </div>
@@ -163,7 +164,7 @@ const ChatWidget = () => {
                         <button
                             key={btn}
                             onClick={() => handleSendMessage(btn.replace(/[🍕⏰📍]/g, '').trim())}
-                            className="whitespace-nowrap px-4 py-2 rounded-full border border-orange-500/20 bg-orange-500/5 text-orange-600 dark:text-orange-400 font-bold text-[10px] uppercase tracking-widest hover:bg-orange-500 hover:text-white transition-all duration-300"
+                            className="whitespace-nowrap px-4 py-2 rounded-full border border-orange-500/20 bg-orange-500/5 text-orange-600 dark:text-orange-400 font-bold text-xs uppercase tracking-widest hover:bg-orange-500 hover:text-white transition-all duration-300"
                         >
                             {btn}
                         </button>
@@ -178,11 +179,13 @@ const ChatWidget = () => {
                         onChange={(e) => setInputValue(e.target.value)}
                         onKeyPress={(e) => e.key === 'Enter' && handleSendMessage(inputValue)}
                         placeholder="Ketik pesan..."
+                        aria-label="Tulis pesan ke Chef Bot"
                         className="flex-1 bg-neutral-100 dark:bg-neutral-800 border-2 border-transparent focus:border-orange-500 rounded-2xl py-3 px-5 text-sm font-medium text-black dark:text-white placeholder:text-neutral-500 dark:placeholder:text-neutral-400 transition-all outline-none"
                     />
                     <button
                         onClick={() => handleSendMessage(inputValue)}
                         disabled={!inputValue.trim()}
+                        aria-label="Kirim Pesan"
                         className="w-12 h-12 bg-orange-500 rounded-2xl flex items-center justify-center text-white shadow-[0_5px_15px_rgba(249,115,22,0.3)] hover:bg-orange-600 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <svg className="w-5 h-5 rotate-90" fill="currentColor" viewBox="0 0 20 20">
@@ -195,6 +198,7 @@ const ChatWidget = () => {
             {/* Floating Toggle Button */}
             <button
                 onClick={toggleChat}
+                aria-label={isOpen ? "Tutup Chat" : "Buka Chat dengan Chef Bot"}
                 className={`relative group w-16 h-16 rounded-full flex items-center justify-center text-white shadow-[0_10px_30px_rgba(249,115,22,0.4)] transition-all duration-500 hover:scale-110 active:scale-90 overflow-hidden ${isOpen ? 'bg-neutral-800' : 'bg-orange-500'}`}
             >
                 <div className="absolute inset-0 bg-gradient-to-tr from-orange-600 to-orange-400"></div>

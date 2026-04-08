@@ -142,6 +142,7 @@ const Navbar = () => {
                     {/* Theme Toggle */}
                     <button
                         onClick={toggleTheme}
+                        aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}
                         className="w-10 h-10 flex items-center justify-center rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition-colors"
                     >
                         {theme === 'dark' ? (
@@ -157,6 +158,7 @@ const Navbar = () => {
 
                     <button
                         onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                        aria-label="Toggle Menu"
                         className="flex md:hidden flex-col gap-1.5 p-2 focus:outline-none group relative w-10 h-10 items-center justify-center"
                     >
                         <span className={`w-8 h-0.5 bg-orange-500 rounded-full transition-all duration-500 absolute ${isMobileMenuOpen ? 'rotate-45' : '-translate-y-2'}`}></span>

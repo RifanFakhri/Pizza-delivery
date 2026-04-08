@@ -275,10 +275,10 @@ export default function Home() {
             end: "bottom 40%",
             scrub: 2,
           },
-          opacity: 0.2,
-          scale: 0.9,
-          y: -50,
-          filter: isMobile ? "blur(0px)" : "blur(10px)",
+          opacity: 1,
+          scale: 0.95,
+          y: -30,
+          filter: isMobile ? "none" : "blur(10px)",
         });
 
         gsap.to(menuRef.current, {
@@ -288,9 +288,9 @@ export default function Home() {
             end: "bottom 20%",
             scrub: 2,
           },
-          opacity: 0.2,
-          scale: 0.9,
-          filter: isMobile ? "blur(0px)" : "blur(10px)",
+          opacity: 1,
+          scale: 0.95,
+          filter: isMobile ? "none" : "blur(10px)",
         });
 
         // Background Parallax
@@ -442,7 +442,7 @@ export default function Home() {
             <button className="px-10 py-4 bg-orange-600 text-white font-black uppercase tracking-[0.2em] rounded-full hover:bg-orange-500 transition-all transform hover:scale-105 shadow-[0_0_30px_rgba(234,88,12,0.5)]">
               Explore Menu
             </button>
-            <p className="text-black/40 dark:text-white/40 text-[10px] uppercase tracking-[0.4em] mt-6 transition-colors duration-500">Developed by RifanFakhri</p>
+            <p className="text-black/40 dark:text-white/40 text-xs uppercase tracking-[0.4em] mt-6 transition-colors duration-500">Developed by RifanFakhri</p>
           </div>
         </section>
 
@@ -503,7 +503,7 @@ export default function Home() {
                   Every slice tells a story of passion, tradition, and the finest ingredients we source.
                 </p>
               </div>
-              <p className="text-lg text-foreground/70 dark:text-foreground/40 leading-relaxed max-w-lg border-l border-foreground/20 dark:border-white/10 pl-6 transition-colors duration-500">
+              <p className="text-lg text-foreground/70 dark:text-foreground/80 leading-relaxed max-w-lg border-l border-foreground/20 dark:border-white/10 pl-6 transition-colors duration-500">
                 We bring the authentic taste of tradition to your table. Our commitment to quality ingredients and artisanal techniques ensures every slice of Mamah Faqih pizza is a masterpiece.
               </p>
             </div>
@@ -523,7 +523,7 @@ export default function Home() {
                 </div>
                 <div className="flex flex-col">
                   <span className="text-foreground font-bold leading-none mb-1 transition-colors duration-500">Chef Faqih</span>
-                  <span className="text-foreground/60 dark:text-foreground/40 text-[10px] uppercase tracking-widest transition-colors duration-500">Master Pizzaiolo</span>
+                  <span className="text-foreground/90 dark:text-foreground/70 dark:text-foreground/80 text-xs uppercase tracking-widest transition-colors duration-500">Master Pizzaiolo</span>
                 </div>
               </div>
             </div>
@@ -622,7 +622,7 @@ export default function Home() {
 
           <div className="max-w-6xl w-full relative z-20">
             <div className="contact-header text-center mb-12 md:mb-20 flex flex-col items-center gap-6">
-              <span className="text-orange-500 font-bold uppercase tracking-[0.4em] text-[10px] md:text-xs">Get In Touch</span>
+              <span className="text-orange-500 font-bold uppercase tracking-[0.4em] text-xs md:text-xs">Get In Touch</span>
               <h2 className="text-4xl sm:text-6xl md:text-9xl font-black text-foreground uppercase tracking-tighter leading-[0.9] md:leading-[0.8] mb-4">
                 Let's Make <br />
                 <span className="text-transparent" style={{ WebkitTextStroke: theme === 'dark' ? '1.5px white' : '1.5px black' }}>Something Delicious</span>
@@ -638,21 +638,21 @@ export default function Home() {
                     <span className="text-orange-500 font-black text-3xl md:text-4xl">01.</span>
                     <div className="flex flex-col">
                       <h4 className="text-foreground font-bold uppercase tracking-widest text-base md:text-lg mb-1 md:mb-2">Location</h4>
-                      <p className="text-sm md:text-base text-foreground/70 dark:text-foreground/60 leading-relaxed font-medium">Jl. Pizza Enak No. 123, <br />Jakarta, Indonesia</p>
+                      <p className="text-sm md:text-base text-foreground/70 dark:text-foreground/90 dark:text-foreground/70 leading-relaxed font-medium">Jl. Pizza Enak No. 123, <br />Jakarta, Indonesia</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-4 md:gap-6 border-l-2 border-orange-500 pl-6 md:pl-8 py-2">
                     <span className="text-orange-500 font-black text-3xl md:text-4xl">02.</span>
                     <div className="flex flex-col">
                       <h4 className="text-foreground font-bold uppercase tracking-widest text-base md:text-lg mb-1 md:mb-2">Contact</h4>
-                      <p className="text-sm md:text-base text-foreground/70 dark:text-foreground/60 leading-relaxed font-medium">+62 123 4567 8900 <br />hello@mamahfaqih.com</p>
+                      <p className="text-sm md:text-base text-foreground/70 dark:text-foreground/90 dark:text-foreground/70 leading-relaxed font-medium">+62 123 4567 8900 <br />hello@mamahfaqih.com</p>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex gap-6">
                   {['Instagram', 'Twitter', 'Facebook'].map((social) => (
-                    <a key={social} href="#" className="text-xs uppercase tracking-[0.2em] font-black text-foreground/50 dark:text-foreground/40 hover:text-orange-500 transition-colors duration-500">
+                    <a key={social} href="#" className="text-xs uppercase tracking-[0.2em] font-black text-foreground/50 dark:text-foreground/80 hover:text-orange-500 transition-colors duration-500">
                       {social}
                     </a>
                   ))}
@@ -664,19 +664,19 @@ export default function Home() {
                 <form className="flex flex-col gap-8">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div className="flex flex-col gap-2">
-                      <label className="text-[10px] uppercase tracking-widest font-black text-orange-600 dark:text-orange-500/60">Name</label>
+                      <label className="text-xs uppercase tracking-widest font-black text-orange-600 dark:text-orange-500/60">Name</label>
                       <input type="text" placeholder="Your Name" className="bg-transparent border-b border-foreground/20 dark:border-foreground/10 py-3 text-lg focus:outline-none focus:border-orange-500 transition-colors duration-500 placeholder:text-foreground/30" />
                     </div>
                     <div className="flex flex-col gap-2">
-                      <label className="text-[10px] uppercase tracking-widest font-black text-orange-600 dark:text-orange-500/60">Email</label>
+                      <label className="text-xs uppercase tracking-widest font-black text-orange-600 dark:text-orange-500/60">Email</label>
                       <input type="email" placeholder="Your Email" className="bg-transparent border-b border-foreground/20 dark:border-foreground/10 py-3 text-lg focus:outline-none focus:border-orange-500 transition-colors duration-500 placeholder:text-foreground/30" />
                     </div>
                   </div>
                   <div className="flex flex-col gap-2">
-                    <label className="text-[10px] uppercase tracking-widest font-black text-orange-600 dark:text-orange-500/60">Message</label>
+                    <label className="text-xs uppercase tracking-widest font-black text-orange-600 dark:text-orange-500/60">Message</label>
                     <textarea rows={4} placeholder="How can we help?" className="bg-transparent border-b border-foreground/20 dark:border-foreground/10 py-3 text-lg focus:outline-none focus:border-orange-500 transition-colors duration-500 resize-none placeholder:text-foreground/30"></textarea>
                   </div>
-                  <button className="self-start mt-6 px-10 md:px-16 py-4 md:py-6 bg-orange-600 text-white font-black uppercase tracking-[0.3em] text-[10px] md:text-xs hover:bg-orange-700 transition-all duration-700 shadow-2xl hover:-translate-y-2 rounded-lg">
+                  <button className="self-start mt-6 px-10 md:px-16 py-4 md:py-6 bg-orange-600 text-white font-black uppercase tracking-[0.3em] text-xs md:text-xs hover:bg-orange-700 transition-all duration-700 shadow-2xl hover:-translate-y-2 rounded-lg">
                     Send Message
                   </button>
                 </form>
@@ -705,9 +705,9 @@ export default function Home() {
                 </p>
                 <div className="flex gap-4">
                   {['Instagram', 'Twitter', 'Facebook', 'TikTok'].map((social) => (
-                    <div key={social} className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-orange-600 hover:border-orange-600 transition-all cursor-pointer group">
-                      <span className="text-[10px] font-bold group-hover:scale-110 transition-transform">{social[0]}</span>
-                    </div>
+                    <a key={social} href="#" aria-label={`Follow us on ${social}`} className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center hover:bg-orange-600 hover:border-orange-600 transition-all cursor-pointer group">
+                      <span className="text-xs font-bold group-hover:scale-110 transition-transform">{social[0]}</span>
+                    </a>
                   ))}
                 </div>
               </div>
@@ -756,7 +756,7 @@ export default function Home() {
             </div>
 
             {/* Bottom Bar */}
-            <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-[10px] uppercase tracking-[0.4em] font-medium text-white/40">
+            <div className="pt-10 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6 text-xs uppercase tracking-[0.4em] font-medium text-white/40">
               <p>© 2026 Mamah Faqih Pizza. All Rights Reserved.</p>
               <div className="flex gap-10">
                 <a href="#" className="hover:text-orange-500 transition-colors">Privacy Policy</a>
